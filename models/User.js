@@ -74,7 +74,7 @@ userSchema.methods.generateToken = function (callback){
 }
 
 //토큰 복호화한 후 비교
-userSchema.static.findByToken = function(token, callback){
+userSchema.statics.findByToken = function(token, callback){
     var user = this;
 
     jwt.verify(token, 'secretToken', function(err, decoded){
@@ -82,7 +82,7 @@ userSchema.static.findByToken = function(token, callback){
         //클라이언트에서 가져온 token과 DB에 보관된 토큰이 일치하는지 확인한다.
         user.findOne({"_id":decoded, "token":token}, function(err, user){
             if (err) return callback(err);
-            callback(user);
+            callback(null, user);
         })
     })
 }
